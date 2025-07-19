@@ -31,7 +31,7 @@
     @include('partials.hero')
 {{-- </section> --}}
 
-<section class="py-8 pt-4 mt-8">
+{{-- <section class="py-8 pt-4 mt-8">
     <div class="max-w-6xl mx-auto px-4">
         <h2 class="text-3xl font-bold text-center mb-8">Pelayanan Desa</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -53,7 +53,7 @@
             </a> --}}
         </div>
     {{-- </div> --}}
-</section>
+</section> --}}
 
 <!-- UMKM SECTION -->
 <section class="mt-16 py-16">
