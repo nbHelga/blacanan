@@ -15,24 +15,24 @@
     
 </head>
 <body class="bg-gray-100">
+    {{-- <div class="flex min-h-screen"> --}}
+        {{-- Header --}}
+        @include('admin.layouts.navbar')
 
-    {{-- Header --}}
-    @include('admin.layouts.navbar')
+        {{-- Sidebar + Konten --}}
+        <div x-data="{ open: true }" class="flex min-h-screen">
+            {{-- Sidebar --}}
+            @include('admin.layouts.sidebar')
 
-    {{-- Sidebar + Konten --}}
-    <div x-data="{ open: true }" class="flex">
-        {{-- Sidebar --}}
-        @include('admin.layouts.sidebar')
+            {{-- Spacer untuk shifting konten --}}
+            <div class="w-48"></div>
 
-        {{-- Spacer untuk shifting konten --}}
-        <div class="w-48"></div>
-
-        {{-- Main Konten --}}
-        <div class="flex-1 px-6 py-6">
-            @yield('content')
+            {{-- Main Konten --}}
+            <div class="flex-1 px-6 py-6">
+                @yield('content')
+            </div>
         </div>
-    </div>
+    {{-- </div> --}}
     @stack('scripts')
-    {{-- Scripts can be added here --}}
 </body>
 </html>

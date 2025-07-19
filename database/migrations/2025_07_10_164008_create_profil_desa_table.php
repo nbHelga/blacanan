@@ -16,8 +16,6 @@ return new class extends Migration
             $table->text('deskripsi')->nullable();
             $table->text('visi')->nullable();
             $table->text('misi')->nullable();
-            $table->json('statistik')->nullable(); // simpan array statistik
-            $table->json('mutasi')->nullable();    // simpan array mutasi
             $table->string('peta')->nullable();
             $table->json('batas')->nullable();     // simpan array batas wilayah
             $table->string('luas')->nullable();

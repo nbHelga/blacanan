@@ -18,21 +18,21 @@ class UMKMSeeder extends Seeder
                 'nama' => 'UMKM Konveksi dan Fashion Rumah',
                 'kategori' => 'Fashion',
                 'deskripsi' => 'UMKM Nafri Fashion yang merupakan andalan Desa Blacanan dalam bidang konveksi rumahan.',
-                'gambar' => 'umkm1.jpg',
+                'gambar' => null,
                 'status' => true,
         ]);
         UMKM::create([
                 'nama' => 'Olahan Hasil Laut',
                 'kategori' => 'Makanan',
                 'deskripsi' => 'Inovasi UMKM DNA Crabs yang menghadirkan olahan kepiting bakau dalam kemasan menarik.',
-                'gambar' => 'umkm2.jpg',
+                'gambar' => null,
                 'status' => true,
         ]);
         UMKM::create([
                 'nama' => 'Pertanian dan Perikanan',
                 'kategori' => 'Pertanian',
                 'deskripsi' => 'Tanah subur mendukung pertanian padi, sayuran, dan tebu, serta tambak dan budidaya ikan.',
-                'gambar' => 'umkm3.jpg',
+                'gambar' => null,
                 'status' => true,
         ]);
         UMKM::create([

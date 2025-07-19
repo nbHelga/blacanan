@@ -55,6 +55,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('footer/edit', [FooterController::class, 'edit'])->name('admin.footer.edit');
     Route::post('footer/update', [FooterController::class, 'update'])->name('admin.footer.update');
     Route::post('footer/kontak/add', [FooterController::class, 'addKontak'])->name('admin.footer.kontak.add');
+    Route::get('footer/kontak/{id}/edit', [FooterController::class, 'editKontak'])->name('admin.footer.kontak.edit');
+    Route::put('footer/kontak/{id}', [FooterController::class, 'updateKontak'])->name('admin.footer.kontak.update');
     Route::delete('footer/kontak/{id}', [FooterController::class, 'deleteKontak'])->name('admin.footer.kontak.delete');
     // Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
@@ -69,7 +71,18 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     // Content
     Route::get('/content', [ContentController::class, 'index'])->name('admin.content.index');
     Route::get('/content/create', [ContentController::class, 'create'])->name('admin.content.create');
-    Route::post('/admin/content/store', [ContentController::class, 'store'])->name('admin.content.store');
+    Route::get('/test-log', function() {
+        file_put_contents(storage_path('logs/debug.log'), "Test route hit\n", FILE_APPEND);
+        \Log::info('Test route hit');
+        return 'Test logged';
+    });
+
+    Route::post('/content/store', function(\Illuminate\Http\Request $request) {
+        file_put_contents(storage_path('logs/debug.log'), "Route hit: admin.content.store\n", FILE_APPEND);
+        \Log::info('Route hit: admin.content.store');
+        \Log::info('Request data in route:', $request->all());
+        return app(\App\Http\Controllers\ContentController::class)->store($request);
+    })->name('admin.content.store');
     Route::get('/admin/content/edit/{id}', [ContentController::class, 'edit'])->name('admin.content.edit');
     Route::put('/admin/content/update/{id}', [ContentController::class, 'update'])->name('admin.content.update');
     Route::delete('/content/delete/{id}', [ContentController::class, 'destroy'])->name('admin.content.delete');

@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('umkms', function (Blueprint $table) {
+        Schema::create('statistik', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('kategori');
-            $table->text('deskripsi');
-            $table->string('gambar')->nullable();
-            $table->boolean('status')->default(false);
+            $table->string('uraian');
+            $table->integer('jumlah');
+            $table->string('satuan');
+            $table->integer('urutan')->default(0); // untuk mengurutkan data
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('umkms');
+        Schema::dropIfExists('statistik');
     }
 };

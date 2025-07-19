@@ -8,7 +8,7 @@
         <h2 class="text-xl font-bold text-blue-700">Manajemen Blog</h2>
         <a href="{{ route('admin.blog.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">+ Tambah Blog</a>
     </div>
-    <x-TabelFleksibel 
+    <x-TabelFleksibel
         :headers="['Kategori', 'Judul', 'Status', 'Tanggal']"
         :rows="$blogs->map(fn($b) => [
             'id' => $b->id,

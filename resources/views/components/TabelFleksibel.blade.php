@@ -19,15 +19,20 @@
     <tbody>
       @foreach ($rows as $row)
         <tr>
-          @foreach ($row as $key => $cell)
-            @continue($key === 'id') {{-- Skip ID kolom --}}
+          @php
+            $rowId = $row['id'] ?? null;
+            $displayData = collect($row)->except(['id'])->toArray();
+          @endphp
+          @foreach ($displayData as $key => $cell)
             <td class="px-4 py-2 border-b border-gray-200">{!! $cell !!}</td>
           @endforeach
           <td class="px-4 py-2 border-b border-gray-200">
-            <a href="{{ route($detailRouteName, ['id' => $row['id']]) }}"
-               class="inline-block px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs">
-              Detail
-            </a>
+            @if($rowId && $detailRouteName)
+              <a href="{{ route($detailRouteName, ['id' => $rowId]) }}"
+                 class="inline-block px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs">
+                Detail
+              </a>
+            @endif
           </td>
         </tr>
       @endforeach

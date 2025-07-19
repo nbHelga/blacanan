@@ -24,12 +24,20 @@
     </div>
     <div class="bg-white rounded shadow p-4">
         <h3 class="font-bold mb-2">Statistik Kependudukan</h3>
-        <pre>{{ json_encode($profil->statistik, JSON_PRETTY_PRINT) }}</pre>
+        <div class="space-y-1 text-sm">
+            @foreach($statistik as $stat)
+                <div>{{ $stat->uraian }}: {{ $stat->jumlah }} {{ $stat->satuan }}</div>
+            @endforeach
+        </div>
         <a href="{{ route('admin.profil_desa.edit') }}" class="text-blue-600">Edit</a>
     </div>
     <div class="bg-white rounded shadow p-4">
         <h3 class="font-bold mb-2">Mutasi Antar Wilayah</h3>
-        <pre>{{ json_encode($profil->mutasi, JSON_PRETTY_PRINT) }}</pre>
+        <div class="space-y-1 text-sm">
+            @foreach($mutasi as $mut)
+                <div>{{ $mut->wilayah }}: Pindah L/P: {{ $mut->pindah_laki }}/{{ $mut->pindah_perempuan }}, Datang L/P: {{ $mut->datang_laki }}/{{ $mut->datang_perempuan }}</div>
+            @endforeach
+        </div>
         <a href="{{ route('admin.profil_desa.edit') }}" class="text-blue-600">Edit</a>
     </div>
     <div class="bg-white rounded shadow p-4">

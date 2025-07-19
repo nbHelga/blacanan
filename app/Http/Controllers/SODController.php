@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SOD;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class SODController extends Controller
 {
@@ -58,7 +59,7 @@ class SODController extends Controller
             if (!Storage::disk('public')->exists($folder)) {
                 Storage::disk('public')->makeDirectory($folder);
             }
-            $file->storeAs("{$folder}", $originalName, 'public');
+            $file->storeAs($folder, $originalName, 'public');
 
             // Perbaikan: simpan ke $content
             $sod->gambar = "{$folder}/{$originalName}";
@@ -74,7 +75,7 @@ class SODController extends Controller
         $request->validate([
             'nama' => 'required',
             'jabatan' => 'required',
-            'deskripsi' => 'required',
+            // 'deskripsi' => 'required',
             'gambar' => 'nullable|image|max:2048',
         ]);
 

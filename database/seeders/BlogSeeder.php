@@ -17,21 +17,21 @@ class BlogSeeder extends Seeder
             'kategori' => 'Edukasi',
             'judul' => 'Pentingnya UMKM Digital',
             'deskripsi' => 'Artikel ini membahas manfaat digitalisasi UMKM.',
-            'gambar' => 'umkm.jpg',
-            'status' => true,            
+            'gambar' => null,
+            'status' => true,
         ]);
         Blog::create([
             'kategori' => 'Perikanan',
             'judul' => 'Pengembangan Perikanan di Desa Blacanan',
             'deskripsi' => 'Artikel ini membahas pengembangan perikanan di Desa Blacanan.',
-            'gambar' => 'perikanan.jpg',
+            'gambar' => null,
             'status' => true,
         ]);
         Blog::create([
             'kategori' => 'Pertanian',
             'judul' => 'Pengembangan Pertanian di Desa Blacanan',
             'deskripsi' => 'Artikel ini membahas pengembangan pertanian di Desa Blacanan.',
-            'gambar' => 'pertanian.jpg',
+            'gambar' => null,
             'status' => true,
         ]);
         Blog::create([

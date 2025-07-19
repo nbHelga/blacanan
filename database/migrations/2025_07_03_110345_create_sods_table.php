@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('jabatan');
             $table->text('deskripsi');
-            $table->string('gambar');
+            $table->string('gambar')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Content;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log; 
 
 class ContentController extends Controller
 {
@@ -49,33 +50,44 @@ class ContentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required',
-            'deskripsi' => 'required',
-            'gambar' => 'nullable|image|max:2048',
-            'video' => 'nullable|mimetypes:video/mp4,video/webm|max:51200', // max 50MB ~ 5 menit
-            'tipe' => 'required|in:gambar,video',
-        ]);
+        'judul' => 'required',
+        'deskripsi' => 'required',
+        'gambar' => 'nullable|image|max:2048',
+        'video' => 'nullable|mimetypes:video/mp4,video/webm|max:51200', // max 50MB ~ 5 menit
+        'tipe' => 'required|in:gambar,video',
+    ]);
 
-        $content = new Content($request->except(['gambar', 'video']));
-        if ($request->tipe === 'gambar' && $request->hasFile('gambar')) {
-            $file = $request->file('gambar');
-            $folder = "content/" . date('Ymd');
-            $file->storeAs("public/{$folder}", $file->getClientOriginalName());
-            $content->gambar = "{$folder}/" . $file->getClientOriginalName();
-            $content->video = null;
-        } elseif ($request->tipe === 'video' && $request->hasFile('video')) {
-            $file = $request->file('video');
-            $folder = "content/" . date('Ymd');
-            $file->storeAs("public/{$folder}", $file->getClientOriginalName());
-            $content->video = "{$folder}/" . $file->getClientOriginalName();
-            $content->gambar = null;
+    $content = new Content($request->except(['gambar', 'video']));
+
+    $dateFolder = date('Ymd');
+    $folder = "contents/{$dateFolder}";
+
+    if ($request->tipe === 'gambar' && $request->hasFile('gambar')) {
+        $file = $request->file('gambar');
+        $originalName = $file->getClientOriginalName();
+
+        if (!Storage::disk('public')->exists($folder)) {
+            Storage::disk('public')->makeDirectory($folder);
         }
+        $file->storeAs($folder, $originalName, 'public');
+        $content->gambar = "{$folder}/{$originalName}";
+        $content->video = null;
+    } elseif ($request->tipe === 'video' && $request->hasFile('video')) {
+        $file = $request->file('video');
+        $originalName = $file->getClientOriginalName();
 
-        // $content->status = $request->status ?? false;
+        if (!Storage::disk('public')->exists($folder)) {
+            Storage::disk('public')->makeDirectory($folder);
+        }
+        $file->storeAs($folder, $originalName, 'public');
+        $content->video = "{$folder}/{$originalName}";
+        $content->gambar = null;
+    }
 
-        $content->save();
+    $content->status = $request->status ?? false;
+    $content->save();
 
-        return redirect()->route('admin.content.index')->with('success', 'Content berhasil ditambahkan');
+    return redirect()->route('admin.content.index')->with('success', 'Content berhasil ditambahkan');
     }
 
 
@@ -91,28 +103,57 @@ class ContentController extends Controller
             'judul' => 'required',
             'deskripsi' => 'required',
             'gambar' => 'nullable|image|max:2048',
+            'video' => 'nullable|mimetypes:video/mp4,video/webm|max:51200',
+            'tipe' => 'required|in:gambar,video',
         ]);
 
         $content = Content::findOrFail($id);
-        $content->fill($request->except('gambar'));
-        if ($request->hasFile('gambar')) {
-            if (isset($content) && $content->gambar && Storage::disk('public')->exists($content->gambar)) {
+        $content->fill($request->except(['gambar', 'video']));
+
+        // Handle file uploads based on type
+        if ($request->tipe === 'gambar' && $request->hasFile('gambar')) {
+            // Delete old files
+            if ($content->gambar && Storage::disk('public')->exists($content->gambar)) {
                 Storage::disk('public')->delete($content->gambar);
             }
+            if ($content->video && Storage::disk('public')->exists($content->video)) {
+                Storage::disk('public')->delete($content->video);
+            }
+
             $file = $request->file('gambar');
             $originalName = $file->getClientOriginalName();
             $dateFolder = date('Ymd');
             $folder = "content/{$dateFolder}";
 
-            // Buat folder kalau belum ada
             if (!Storage::disk('public')->exists($folder)) {
                 Storage::disk('public')->makeDirectory($folder);
             }
-            $file->storeAs("{$folder}", $originalName, 'public');
-
-            // Perbaikan: simpan ke $content
+            $file->storeAs($folder, $originalName, 'public');
             $content->gambar = "{$folder}/{$originalName}";
+            $content->video = null;
+
+        } elseif ($request->tipe === 'video' && $request->hasFile('video')) {
+            // Delete old files
+            if ($content->gambar && Storage::disk('public')->exists($content->gambar)) {
+                Storage::disk('public')->delete($content->gambar);
+            }
+            if ($content->video && Storage::disk('public')->exists($content->video)) {
+                Storage::disk('public')->delete($content->video);
+            }
+
+            $file = $request->file('video');
+            $originalName = $file->getClientOriginalName();
+            $dateFolder = date('Ymd');
+            $folder = "content/{$dateFolder}";
+
+            if (!Storage::disk('public')->exists($folder)) {
+                Storage::disk('public')->makeDirectory($folder);
+            }
+            $file->storeAs($folder, $originalName, 'public');
+            $content->video = "{$folder}/{$originalName}";
+            $content->gambar = null;
         }
+
         $content->status = $request->status ?? false;
         $content->save();
 
@@ -122,9 +163,17 @@ class ContentController extends Controller
     public function destroy($id)
     {
         $content = Content::findOrFail($id);
-        if ($content->gambar && file_exists(public_path($content->gambar))) {
-            unlink(public_path($content->gambar));
+
+        // Delete image file if exists
+        if ($content->gambar && Storage::disk('public')->exists($content->gambar)) {
+            Storage::disk('public')->delete($content->gambar);
         }
+
+        // Delete video file if exists
+        if ($content->video && Storage::disk('public')->exists($content->video)) {
+            Storage::disk('public')->delete($content->video);
+        }
+
         $content->delete();
         return redirect()->route('admin.content.index')->with('success', 'Content berhasil dihapus');
     }

@@ -30,6 +30,5 @@
     <div class="mt-4">
         {{ $sods->links('components.pagination') }}
     </div>
-    {{-- <x-Pagination :paginator="$sods" :perPage="$perPage"/> --}}
 </div>
 @endsection

@@ -10,6 +10,6 @@
     <div class="w-full h-64 bg-gray-200 rounded mb-6 overflow-hidden flex items-center justify-center">
         <img src="{{ asset($budaya->gambar) }}" alt="{{ $budaya->judul }}" class="object-cover w-full h-full">
     </div>
-    <div class="text-gray-700">{{ $budaya->deskripsi }}</div>
+    <div class="text-gray-700">{!! $budaya->deskripsi !!}</div>
 </div>
 @endsection

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\BlogImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class BlogController extends Controller
 {
@@ -19,7 +21,7 @@ class BlogController extends Controller
     
     public function show($id)
     {
-        $blog = Blog::findOrFail($id);
+        $blog = Blog::with('images')->findOrFail($id);
         return view('blog.detail', compact('blog'));
     }
 
@@ -39,7 +41,8 @@ class BlogController extends Controller
     public function create()
     {
         $blog = null;
-        return view('admin.blog.form', compact('blog'));
+        $images = [];
+        return view('admin.blog.form', compact('blog','images'));
     }
 
     public function store(Request $request)
@@ -48,34 +51,54 @@ class BlogController extends Controller
             'judul' => 'required',
             'kategori' => 'required',
             'deskripsi' => 'required',
-            'gambar' => 'nullable|image|max:2048',
+            'gambar' => 'nullable|array',
+            'gambar.*' => 'image|max:2048',
         ]);
 
         $blog = new Blog($request->except('gambar'));
+        $blog->status = $request->status ?? false;
+        $blog->save();
+
+        // Handle multiple images from GambarUpload component
         if ($request->hasFile('gambar')) {
-            if (isset($blog) && $blog->gambar && Storage::disk('public')->exists($blog->gambar)) {
-                Storage::disk('public')->delete($blog->gambar);
-            }
-            $file = $request->file('gambar');
-            $originalName = $file->getClientOriginalName();
             $dateFolder = date('Ymd');
-            $folder = "blog/{$dateFolder}";
+            $folder = "blogs/{$dateFolder}";
+
+            // Create folder if it doesn't exist
+            if (!Storage::disk('public')->exists('blogs')) {
+                Storage::disk('public')->makeDirectory('blogs');
+            }
             if (!Storage::disk('public')->exists($folder)) {
                 Storage::disk('public')->makeDirectory($folder);
             }
-            $file->storeAs("{$folder}", $originalName, 'public');
-            $blog->gambar = "{$folder}/{$originalName}";
+
+            // $files = is_array($request->file('gambar')) ? $request->file('gambar') : [$request->file('gambar')];
+
+            // foreach ($files as $index => $file) {
+            foreach ($request->file('gambar') as $index => $file) {
+                if ($file && $file->isValid()) {
+                    $originalName = $file->getClientOriginalName();
+                    $file->storeAs($folder, $originalName, 'public');
+
+                    BlogImage::create([
+                        'blog_id' => $blog->id,
+                        'gambar' => "{$folder}/{$originalName}",
+                        'urutan' => $index + 1
+                    ]);
+                }
+            }
         }
-        $blog->status = $request->status ?? false;
-        $blog->save();
 
         return redirect()->route('admin.blog.index')->with('success', 'Blog berhasil ditambahkan');
     }
 
     public function edit($id)
     {
-        $blog = Blog::findOrFail($id);
-        return view('admin.blog.form', compact('blog'));
+        $blog = Blog::with('images')->findOrFail($id);
+        $images = $blog->images->pluck('gambar')->map(function($img) {
+        return 'storage/' . $img;
+        })->toArray();
+        return view('admin.blog.form', compact('blog', 'images'));
     }
 
     public function update(Request $request, $id)
@@ -84,25 +107,51 @@ class BlogController extends Controller
             'judul' => 'required',
             'kategori' => 'required',
             'deskripsi' => 'required',
-            'gambar' => 'nullable|image|max:2048',
+            'gambar' => 'nullable|array',
+            'gambar.*' => 'image|max:2048',
         ]);
 
         $blog = Blog::findOrFail($id);
         $blog->fill($request->except('gambar'));
+
+        // Handle new images if uploaded
         if ($request->hasFile('gambar')) {
-            if (isset($blog) && $blog->gambar && Storage::disk('public')->exists($blog->gambar)) {
-                Storage::disk('public')->delete($blog->gambar);
+            // Delete old images
+            foreach ($blog->images as $oldImage) {
+                if (Storage::disk('public')->exists($oldImage->gambar)) {
+                    Storage::disk('public')->delete($oldImage->gambar);
+                }
+                $oldImage->delete();
             }
-            $file = $request->file('gambar');
-            $originalName = $file->getClientOriginalName();
+
             $dateFolder = date('Ymd');
-            $folder = "blog/{$dateFolder}";
+            $folder = "blogs/{$dateFolder}";
+
+            // Create folder if it doesn't exist
+            if (!Storage::disk('public')->exists('blogs')) {
+                Storage::disk('public')->makeDirectory('blogs');
+            }
             if (!Storage::disk('public')->exists($folder)) {
                 Storage::disk('public')->makeDirectory($folder);
             }
-            $file->storeAs("{$folder}", $originalName, 'public');
-            $blog->gambar = "{$folder}/{$originalName}";
+
+            // $files = is_array($request->file('gambar')) ? $request->file('gambar') : [$request->file('gambar')];
+
+            // foreach ($files as $index => $file) {
+            foreach ($request->file('gambar') as $index => $file) {
+                if ($file && $file->isValid()) {
+                    $originalName = $file->getClientOriginalName();
+                    $file->storeAs($folder, $originalName, 'public');
+
+                    BlogImage::create([
+                        'blog_id' => $blog->id,
+                        'gambar' => "{$folder}/{$originalName}",
+                        'urutan' => $index + 1
+                    ]);
+                }
+            }
         }
+
         $blog->status = $request->status ?? false;
         $blog->save();
 
@@ -112,9 +161,15 @@ class BlogController extends Controller
     public function destroy($id)
     {
         $blog = Blog::findOrFail($id);
-        if ($blog->gambar && Storage::disk('public')->exists($blog->gambar)) {
-            Storage::disk('public')->delete($blog->gambar);
+
+        // Delete all images
+        foreach ($blog->images as $image) {
+            if (Storage::disk('public')->exists($image->gambar)) {
+                Storage::disk('public')->delete($image->gambar);
+            }
+            $image->delete();
         }
+
         $blog->delete();
         return redirect()->route('admin.blog.index')->with('success', 'Blog berhasil dihapus');
     }

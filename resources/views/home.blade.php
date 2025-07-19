@@ -65,10 +65,12 @@
                 @foreach($umkms as $umkm)
                 <a href="{{ url('umkm/'.$umkm->id) }}" class="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center hover:scale-105 transition-transform duration-300">
                     <div class="w-36 h-36 rounded-full bg-[#008080] flex items-center justify-center mb-4 overflow-hidden border-4 border-white">
-                        <img src="{{ $umkm->gambar }}" alt="{{ $umkm->nama }}" class="object-cover w-32 h-32 rounded-full">
+                        <img src="{{ 'storage/'.$umkm->gambar }}" alt="{{ $umkm->nama }}" class="object-cover w-32 h-32 rounded-full">
                     </div>
                     <div class="font-bold text-xl text-gray-600 mb-2 text-center">{{ $umkm->nama }}</div>
-                    <p class="text-gray-800 text-center">{{ $umkm->deskripsi }}</p>
+                    <p class="text-gray-800 text-center">
+                    {{ Str::limit(strip_tags($umkm->deskripsi), 100, '...') }}
+                </p>
                 </a>
                 @endforeach
             </div>
@@ -86,7 +88,7 @@
                 @foreach($budayas as $budaya)
                 <a href="{{ url('budaya/'.$budaya->id) }}" class="bg-gray-100 rounded-lg shadow-lg p-6 flex flex-col items-center hover:scale-105 transition-transform duration-300">
                     <div class="w-36 h-36 bg-gray-700 rounded mb-4 overflow-hidden flex items-center justify-center">
-                        <img src="{{ $budaya->gambar }}" alt="{{ $budaya->judul }}" class="object-cover w-full h-full">
+                        <img src="{{ 'storage/'.$budaya->gambar }}" alt="{{ $budaya->judul }}" class="object-cover w-full h-full">
                     </div>
                     <div class="font-bold text-lg text-gray-800 mb-1 text-center">{{ $budaya->judul }}</div>
                     <div class="text-gray-600 text-center text-sm">{{ $budaya->subjudul }}</div>
@@ -107,7 +109,7 @@
                 @foreach($sods as $sod)
                 <div class="bg-gray-800 rounded-lg shadow-lg p-8 flex flex-col items-center border border-green-400">
                     <div class="w-24 h-24 rounded-full bg-white flex items-center justify-center mb-4 overflow-hidden border-4 border-green-400">
-                        <img src="{{ $sod->gambar }}" alt="{{ $sod->nama }}" class="object-cover w-20 h-20 rounded-full">
+                        <img src="{{'storage/'.$sod->gambar }}" alt="{{ $sod->nama }}" class="object-cover w-20 h-20 rounded-full">
                     </div>
                     {{-- <p class="text-gray-300 text-center mb-4">{{ $sod->deskripsi }}</p> --}}
                     <div class="font-bold text-white text-lg">{{ $sod->nama }}</div>
@@ -136,13 +138,19 @@
             <a href="{{ url('blog/'.$blog->id) }}"
             class="block rounded-lg overflow-hidden shadow-lg bg-white hover:scale-105 transition-transform duration-300">
             <div class="h-56 bg-gray-200 relative">
-                <img src="{{ asset($blog->gambar) }}" alt="{{ $blog->judul }}"
-                class="object-cover w-full h-full absolute top-0 left-0 opacity-80">
+                @if($blog->images->count() > 0)
+                    <img src="{{ asset('storage/'.$blog->images->first()->gambar) }}" alt="{{ $blog->judul }}"
+                         class="object-cover w-full h-full absolute top-0 left-0 opacity-80">
+                @else
+                    <div class="w-full h-full flex items-center justify-center bg-gray-300">
+                        <span class="text-gray-500">No Image</span>
+                    </div>
+                @endif
             </div>
             <div class="p-4 bg-white relative z-10">
                 <div class="text-lg font-semibold text-gray-800 mb-1">{{ $blog->kategori ?? 'Berita Desa' }}</div>
                 <div class="text-xl font-bold text-gray-900 leading-tight mb-2">{{ $blog->judul }}</div>
-                <div class="text-gray-600 line-clamp-3">{{ Str::limit($blog->deskripsi, 100) }}</div>
+                <div class="text-gray-600 line-clamp-3">{{ Str::limit(strip_tags($blog->deskripsi), 100, '...') }}</div>
             </div>
             </a>
         </template>

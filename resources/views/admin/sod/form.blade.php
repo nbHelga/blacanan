@@ -20,12 +20,7 @@
             label="Jabatan"
             :value="$sod->jabatan ?? ''"
         />
-        @component('components.DeskripsiEditor', ['value' => $sod->deskripsi ?? old('deskripsi')])
-        @endcomponent
-        @component('components.GambarUpload', [
-            'value' => isset($sod) && $sod->gambar ? 'storage/' . $sod->gambar : null
-        ])
-        @endcomponent
+        <x-GambarUpload :value="isset($sod) && $sod->gambar ? 'storage/' . $sod->gambar : null" />
         <div class="flex justify-end">
             <button type="button" class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 mr-2" @click="showAdd = false">Batal</button>
             <button type="button" class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700" @click="showAdd = true">Simpan</button>
@@ -39,15 +34,5 @@
             onCancel="showAdd = false"
         />
     </form>
-    <button type="button" @click="showAdd = true" class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700">Tambah</button>
-    <x-confirm-dialog 
-        :show="(bool) false"
-        type="add"
-        title="Konfirmasi Penambahan"
-        message="Apakah Anda yakin untuk menambahkan Konten?"
-        onConfirm="document.querySelector('form').submit()"
-        onCancel="showAdd = false"
-    />
-    
 </div>
 @endsection

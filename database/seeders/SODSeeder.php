@@ -15,16 +15,16 @@ class SODSeeder extends Seeder
     public function run(): void
     {
         $data = [
-            ['nama' => 'Khusaeni', 'jabatan' => 'Kepala Desa', 'deskripsi' => '-', 'gambar' => 'dataStartup/KHUSAENI.jpg'],
-            ['nama' => 'Taufik Wiluyo, S.Pd', 'jabatan' => 'Sekretaris', 'deskripsi' => '-', 'gambar' => 'dataStartup/TAUFIK WILUYO, S.Pd.jpg'],
-            ['nama' => 'Arifan Dian Gustaf, S.Pd', 'jabatan' => 'Kaur Keuangan', 'deskripsi' => '-', 'gambar' => 'dataStartup/ARIFAN DIAN GUSTAF, S.Pd.jpg'],
-            ['nama' => 'Aliyah, S.Pd', 'jabatan' => 'Kaur umum & perencanaan', 'deskripsi' => '-', 'gambar' => 'dataStartup/ALIYAH, S.Pd.jpg'],
-            ['nama' => 'Menik Harnani, S.Pd', 'jabatan' => 'Kasi Pemerintahan', 'deskripsi' => '-', 'gambar' => 'dataStartup/MENIK HARNANI.jpg'],
-            ['nama' => 'Eko Pamuji', 'jabatan' => 'Kasi Kesejahteraan & Pelayanan', 'deskripsi' => '-', 'gambar' => 'dataStartup/NUROKHIM.jpg'],
-            ['nama' => '-', 'jabatan' => 'Kadus keburan I', 'deskripsi' => 'Meninggal', 'gambar' => 'dataStartup/Kadus keburan I.jpeg'],
-            ['nama' => 'Imam Cipto Adi', 'jabatan' => 'Kadus keburan II', 'deskripsi' => '-', 'gambar' => 'dataStartup/IMAM CIPTO ADI.jpg'],
-            ['nama' => 'Tarjono', 'jabatan' => 'Kadus Blacanan I', 'deskripsi' => '-', 'gambar' => 'dataStartup/TARJONO.jpg'],
-            ['nama' => 'H. Tarkuat', 'jabatan' => 'Kadus Blacanan II', 'deskripsi' => '-', 'gambar' => 'dataStartup/TARKUAT.jpg'],
+            ['nama' => 'Khusaeni', 'jabatan' => 'Kepala Desa', 'deskripsi' => '-', 'gambar' => null],
+            ['nama' => 'Taufik Wiluyo, S.Pd', 'jabatan' => 'Sekretaris', 'deskripsi' => '-', 'gambar' => null],
+            ['nama' => 'Arifan Dian Gustaf, S.Pd', 'jabatan' => 'Kaur Keuangan', 'deskripsi' => '-', 'gambar' => null],
+            ['nama' => 'Aliyah, S.Pd', 'jabatan' => 'Kaur umum & perencanaan', 'deskripsi' => '-', 'gambar' => null],
+            ['nama' => 'Menik Harnani, S.Pd', 'jabatan' => 'Kasi Pemerintahan', 'deskripsi' => '-', 'gambar' => null],
+            ['nama' => 'Eko Pamuji', 'jabatan' => 'Kasi Kesejahteraan & Pelayanan', 'deskripsi' => '-', 'gambar' => null],
+            ['nama' => '-', 'jabatan' => 'Kadus keburan I', 'deskripsi' => 'Meninggal', 'gambar' => null],
+            ['nama' => 'Imam Cipto Adi', 'jabatan' => 'Kadus keburan II', 'deskripsi' => '-', 'gambar' => null],
+            ['nama' => 'Tarjono', 'jabatan' => 'Kadus Blacanan I', 'deskripsi' => '-', 'gambar' => null],
+            ['nama' => 'H. Tarkuat', 'jabatan' => 'Kadus Blacanan II', 'deskripsi' => '-', 'gambar' => null],
         ];
 
         foreach ($data as $item) {

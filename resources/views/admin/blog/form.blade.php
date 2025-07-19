@@ -3,7 +3,7 @@
 @section('page_title', 'Form Blog')
 
 @section('content')
-<div class="max-w-3xl mx-auto py-10 px-4">
+<div x-data="{ showAdd: false }" class="max-w-3xl mx-auto py-10 px-4">
     <h2 class="text-xl font-bold text-blue-700 mb-6">Form Blog</h2>
     <form action="{{ isset($blog) ? route('admin.blog.update', $blog->id) : route('admin.blog.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6 bg-white p-6 rounded-lg shadow">
         @csrf
@@ -22,9 +22,12 @@
         />
         @component('components.DeskripsiEditor', ['value' => $blog->deskripsi ?? old('deskripsi')])
         @endcomponent
-        @component('components.GambarUpload', [
-            'value' => isset($blog) && $blog->gambar ? 'storage/'.$blog->gambar : null
+        {{-- @component('components.MultipleGambarUpload', [
+            'images' => isset($blog) ? $blog->images : []
         ])
+        @endcomponent --}}
+        {{-- <x-MultipleImageUpload :value="$images" /> --}}
+        @component('components.MultipleImageUpload', ['value' => $images])
         @endcomponent
         <div class="flex justify-end">
             <button type="button" class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 mr-2" @click="showAdd = false">Batal</button>

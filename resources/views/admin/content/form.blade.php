@@ -28,7 +28,8 @@
                 <option value="video">Video</option>
             </select>
         </div>
-        <template x-if="tipe === 'gambar'">
+        <x-ImgVidUpload :value="isset($content) && $content->gambar ? 'storage/' . $content->gambar : null" :tipe="old('tipe', $content->tipe ?? 'gambar')" />
+        {{-- <template x-if="tipe === 'gambar'">
             <div>
                 <x-GambarUpload :value="isset($content) && $content->gambar ? 'storage/'.$content->gambar : null" />
             </div>
@@ -41,7 +42,7 @@
                     <video src="{{ asset('storage/'.$content->video) }}" controls class="w-64 mt-2"></video>
                 @endif
             </div>
-        </template>
+        </template> --}}
         <div class="flex justify-end">
             <button type="button" class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 mr-2" @click="showAdd = false">Batal</button>
             <button type="button" class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700" @click="showAdd = true">Simpan</button>
@@ -55,7 +56,7 @@
             onCancel="showAdd = false"
         />
     </form>
-    <button type="button" @click="showAdd = true" class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700">Tambah</button>
+    {{-- <button type="button" @click="showAdd = true" class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700">Tambah</button> --}}
     <x-confirm-dialog 
         :show="(bool) false"
         type="add"

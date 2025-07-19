@@ -6,11 +6,11 @@
         <span class="mr-4">Kategori: {{ $umkm->kategori }}</span>
         <span class="mr-4">Tanggal: {{ $umkm->created_at->format('d M Y') }}</span>
     </div>
-    <div class="w-full h-64 bg-gray-200 rounded mb-6 overflow-hidden flex items-center justify-center">
-        <img src="{{ asset($umkm->gambar) }}" alt="{{ $umkm->nama }}" class="object-cover w-full h-full">
+    <div class="w-full h-full bg-gray-200 rounded mb-6 overflow-hidden flex items-center justify-center">
+        <img src="{{ asset('storage/'.$umkm->gambar) }}" alt="{{ $umkm->nama }}" class="object-cover w-full h-full">
     </div>
-    <div class="text-gray-700 mb-4">{{ $umkm->deskripsi }}</div>
-    <div>
+    <div class="text-gray-700">{!! $umkm->deskripsi !!}</div>
+    <div class="pt-8">
         <h3 class="font-semibold mb-2">Kontak UMKM:</h3>
         @if($umkm->kontak)
             @foreach(json_decode($umkm->kontak, true) as $kontak)

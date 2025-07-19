@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('umkms', function (Blueprint $table) {
+        Schema::create('blog_images', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('kategori');
-            $table->text('deskripsi');
-            $table->string('gambar')->nullable();
-            $table->boolean('status')->default(false);
+            $table->unsignedBigInteger('blog_id');
+            $table->string('gambar');
+            $table->integer('urutan')->default(0); // untuk mengurutkan gambar
             $table->timestamps();
+            
+            $table->foreign('blog_id')->references('id')->on('blogs')->onDelete('cascade');
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('umkms');
+        Schema::dropIfExists('blog_images');
     }
 };

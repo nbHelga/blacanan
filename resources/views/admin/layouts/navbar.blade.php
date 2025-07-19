@@ -1,4 +1,4 @@
-<nav class="bg-white shadow-sm">
+<nav class="bg-white shadow-sm full-screen">
   <div class="w-full px-8">
     <div class="flex h-16 items-center justify-between">
       <div class="flex items-center">

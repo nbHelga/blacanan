@@ -1,11 +1,11 @@
 @props(['value' => ''])
 
-<div class="w-full overflow-x-auto">
-  <label for="deskripsi" class="block text-sm font-medium text-gray-700">Deskripsi</label>
+<div class="w-full overflow-x-auto mb-6 p-4 bg-white rounded shadow">
+  <label for="deskripsi" class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
   <textarea 
       id="ckeditor_deskripsi"
       name="deskripsi"
-      class="w-full min-h-[400px] border border-gray-300 rounded">
+      class="w-full min-h-[400px] border border-gray-300 rounded p-4 mb-2">
   {{ old('deskripsi', $value) }}</textarea>
 </div>
 
@@ -29,7 +29,9 @@
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         ClassicEditor
-          .create(document.querySelector('#ckeditor_deskripsi'))
+          .create(document.querySelector('#ckeditor_deskripsi'),{
+            toolbar: ['bold', 'italic', 'bulletedList', 'numberedList', 'insertTable', 'imageUpload']
+          })
           .catch(error => {
             console.error(error);
           });

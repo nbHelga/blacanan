@@ -22,27 +22,45 @@
                 @if(isset($footer->kontak) && count($footer->kontak))
                     @foreach($footer->kontak as $kontak)
                         <li class="flex items-center space-x-3">
-                            @switch($kontak->tipe)
-                                @case('email')
-                                    <span class="material-icons text-green-400">email</span>
-                                    <a href="mailto:{{ $kontak->value }}" class="hover:text-green-400">{{ $kontak->value }}</a>
-                                    @break
-                                @case('phone')
-                                    <span class="material-icons text-green-400">phone</span>
-                                    <a href="tel:{{ $kontak->value }}" class="hover:text-green-400">{{ $kontak->value }}</a>
-                                    @break
-                                @case('facebook')
-                                    <span class="material-icons text-blue-400">facebook</span>
-                                    <a href="{{ $kontak->value }}" target="_blank" rel="noopener" class="hover:text-blue-400">{{ $kontak->label ?? 'Facebook' }}</a>
-                                    @break
-                                @case('instagram')
-                                    <span class="material-icons text-pink-400">instagram</span>
-                                    <a href="{{ $kontak->value }}" target="_blank" rel="noopener" class="hover:text-pink-400">{{ $kontak->label ?? 'Instagram' }}</a>
-                                    @break
-                                @default
-                                    <span class="material-icons text-gray-400">contact_mail</span>
-                                    <span>{{ $kontak->label ?? $kontak->tipe }}: {{ $kontak->value }}</span>
-                            @endswitch
+                            @if($kontak->gambar)
+                                <img src="{{ asset('storage/'.$kontak->gambar) }}" alt="{{ $kontak->tipe }}" class="w-5 h-5 object-cover rounded">
+                            @else
+                                @switch($kontak->tipe)
+                                    @case('email')
+                                        <span class="material-icons text-green-400 text-lg">email</span>
+                                        @break
+                                    @case('phone')
+                                        <span class="material-icons text-green-400 text-lg">phone</span>
+                                        @break
+                                    @case('facebook')
+                                        <span class="material-icons text-blue-400 text-lg">facebook</span>
+                                        @break
+                                    @case('instagram')
+                                        <span class="material-icons text-pink-400 text-lg">camera_alt</span>
+                                        @break
+                                    @case('twitter')
+                                        <span class="material-icons text-blue-300 text-lg">alternate_email</span>
+                                        @break
+                                    @default
+                                        <span class="material-icons text-gray-400 text-lg">contact_mail</span>
+                                @endswitch
+                            @endif
+
+                            @if(filter_var($kontak->value, FILTER_VALIDATE_URL))
+                                <a href="{{ $kontak->value }}" target="_blank" rel="noopener" class="hover:text-white transition-colors">
+                                    {{ $kontak->display_name }}
+                                </a>
+                            @elseif($kontak->tipe === 'email')
+                                <a href="mailto:{{ $kontak->value }}" class="hover:text-green-400 transition-colors">
+                                    {{ $kontak->display_name }}
+                                </a>
+                            @elseif($kontak->tipe === 'phone')
+                                <a href="tel:{{ $kontak->value }}" class="hover:text-green-400 transition-colors">
+                                    {{ $kontak->display_name }}
+                                </a>
+                            @else
+                                <span>{{ $kontak->display_name }}</span>
+                            @endif
                         </li>
                     @endforeach
                 @else

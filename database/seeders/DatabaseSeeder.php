@@ -27,6 +27,9 @@ class DatabaseSeeder extends Seeder
             BlogSeeder::class,
             ContentSeeder::class,
             UserSeeder::class,
+            StatistikSeeder::class,
+            MutasiSeeder::class,
+            FooterSeeder::class,
         ]);
     }
 }

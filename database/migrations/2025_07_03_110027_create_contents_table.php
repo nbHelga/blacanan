@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('judul');
             $table->text('deskripsi');
-            $table->string('gambar');
+            $table->string('tipe')->default('gambar'); // gambar atau video
+            $table->string('gambar')->nullable(); // path gambar
+            $table->string('video')->nullable();  // path video
             $table->boolean('status')->default(false);
             $table->timestamps();
         });

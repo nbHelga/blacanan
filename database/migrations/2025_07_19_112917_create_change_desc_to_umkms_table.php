@@ -11,14 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('umkms', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama');
-            $table->string('kategori');
-            $table->text('deskripsi');
-            $table->string('gambar')->nullable();
-            $table->boolean('status')->default(false);
-            $table->timestamps();
+        Schema::table('umkms', function (Blueprint $table) {
+            $table->longText('deskripsi')->change();
         });
     }
 

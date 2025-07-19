@@ -78,6 +78,5 @@
             <img src="{{ asset('storage/'.$sod->gambar) }}" alt="{{ $sod->nama }}" class="object-cover object-center w-auto h-48 max-h-60 rounded">
         @endif
     </div>
-    <div class="text-gray-700">{!! $sod->deskripsi !!}</div>
 </div>
 @endsection

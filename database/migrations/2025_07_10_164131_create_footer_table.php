@@ -16,6 +16,7 @@ return new class extends Migration
             $table->text('deskripsi')->nullable();
             $table->string('alamat')->nullable();
             $table->text('maps')->nullable();
+            $table->text('maps_link')->nullable();
             $table->timestamps();
         });
 
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->string('tipe'); // email, phone, facebook, instagram, dll
             $table->string('label')->nullable();
             $table->string('value');
+            $table->string('gambar')->nullable(); // untuk logo/icon kontak
             $table->unsignedBigInteger('footer_id');
             $table->foreign('footer_id')->references('id')->on('footer')->onDelete('cascade');
             $table->timestamps();
@@ -35,7 +37,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('footer');
-        Schema::dropIfExists('footer_kontak');    
+        Schema::dropIfExists('footer_kontak'); 
+        Schema::dropIfExists('footer');   
     }
 };
