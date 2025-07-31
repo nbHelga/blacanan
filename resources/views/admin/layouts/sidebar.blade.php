@@ -21,6 +21,18 @@
         <span class="material-icons mr-3 px-4">article</span>
         <span>Content</span>
       </a>
+      <a href="{{ route('admin.kependudukan.index') }}" class="flex items-center px-2 py-2 rounded-lg hover:bg-blue-600 transition">
+        <span class="material-icons mr-3 px-4">people</span>
+        <span>Kependudukan</span>
+      </a>
+      <a href="{{ route('admin.umkm.index') }}" class="flex items-center px-2 py-2 rounded-lg hover:bg-blue-600 transition">
+        <span class="material-icons mr-3 px-4">store</span>
+        <span>UMKM</span>
+      </a>
+      <a href="{{ route('admin.budaya.index') }}" class="flex items-center px-2 py-2 rounded-lg hover:bg-blue-600 transition">
+        <span class="material-icons mr-3 px-4">local_florist</span>
+        <span>Budaya</span>
+      </a>
       <a href="{{ route('admin.sod.index') }}" class="flex items-center px-2 py-2 rounded-lg hover:bg-blue-600 transition">
         <span class="material-icons mr-3 px-4">groups</span>
         <span>SOD</span>
@@ -29,11 +41,7 @@
         <span class="material-icons mr-3 px-4">feed</span>
         <span>Blog</span>
       </a>
-      <a href="{{ route('admin.umkm.index') }}" class="flex items-center px-2 py-2 rounded-lg hover:bg-blue-600 transition">
-        <span class="material-icons mr-3 px-4">store</span>
-        <span>UMKM</span>
-      </a>
-      <a href="{{ route('admin.footer.index') }}" class="flex items-center px-2 py-2 rounded-lg hover:bg-blue-600 transition">
+      <a href="{{ route('admin.footer.index') }}" class="flex items-center px-2 py-2 pb-4 rounded-lg hover:bg-blue-600 transition">
         <span class="material-icons mr-3 px-4">settings</span>
         <span>Footer</span>
       </a>
@@ -41,7 +49,7 @@
   </div>
 
   {{-- Logout --}}
-  <form action="{{ route('logout') }}" method="POST" class="mb-4">
+  <form action="{{ route('logout') }}" method="POST" class="my-8">
     @csrf
     <button type="submit" class="flex items-center px-2 py-2 rounded-lg bg-red-700 hover:bg-red-600 transition w-full font-semibold">
       <span class="material-icons mr-3">logout</span>

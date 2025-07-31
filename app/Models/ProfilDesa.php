@@ -9,13 +9,13 @@ class ProfilDesa extends Model
     protected $table = 'profil_desa';
     protected $guarded = [];
     protected $casts = [
-        'batas' => 'array',
+        // 'batas' => 'array', // kolom batas tidak ada di tabel
     ];
 
-    public function sarana()
-    {
-        return $this->hasOne(SaranaDesa::class);
-    }
+    // public function sarana()
+    // {
+    //     return $this->hasOne(SaranaDesa::class);
+    // }
 
     // SaranaDesa.php
     public function profil()

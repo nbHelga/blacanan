@@ -9,11 +9,15 @@
         </div>
         <div>
             <h4 class="text-white font-bold text-lg mb-2">Lokasi</h4>
-            @if(!empty($footer->maps))
-                {!! $footer->maps !!}
-            @else
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18..." class="w-full h-32 mb-2 rounded-lg border-0" allowfullscreen="" loading="lazy"></iframe>
-            @endif
+            <div class="w-full h-32 mb-2 rounded-lg overflow-hidden">
+                @if(!empty($footer->maps))
+                    <div class="w-full h-full">
+                        {!! str_replace(['width="600"', 'height="450"'], ['width="100%"', 'height="128"'], $footer->maps) !!}
+                    </div>
+                @else
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18..." class="w-full h-full rounded-lg border-0" allowfullscreen="" loading="lazy"></iframe>
+                @endif
+            </div>
             <p class="text-sm">{{ $footer->alamat ?? 'Jl. Raya Blacanan No. 1, Siwalan, Pekalongan' }}</p>
         </div>
         <div>

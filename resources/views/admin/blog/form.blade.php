@@ -13,12 +13,12 @@
         <x-JudulInput
             name="judul"
             label="Judul"
-            :value="$blog->judul ?? old('judul')"
+            value="{{ $blog->judul ?? old('judul') }}"
         />
         <x-JudulInput
             name="kategori"
             label="Kategori"
-            :value="$blog->kategori ?? old('kategori')"
+            value="{{ $blog->kategori ?? old('kategori') }}"
         />
         @component('components.DeskripsiEditor', ['value' => $blog->deskripsi ?? old('deskripsi')])
         @endcomponent
@@ -26,11 +26,11 @@
             'images' => isset($blog) ? $blog->images : []
         ])
         @endcomponent --}}
-        {{-- <x-MultipleImageUpload :value="$images" /> --}}
-        @component('components.MultipleImageUpload', ['value' => $images])
-        @endcomponent
+        <x-MultipleImageUpload value="{{ isset($images) ? implode(',', $images) : '' }}" />
+        {{-- @component('components.MultipleImageUpload', ['value' => $images])
+        @endcomponent --}}
         <div class="flex justify-end">
-            <button type="button" class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 mr-2" @click="showAdd = false">Batal</button>
+            <a href="{{ isset($blog) ? route('admin.blog.detail', $blog->id) : route('admin.blog.index') }}" class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 mr-2 inline-block text-center">Batal</a>
             <button type="button" class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700" @click="showAdd = true">Simpan</button>
         </div>
         <x-confirm-dialog

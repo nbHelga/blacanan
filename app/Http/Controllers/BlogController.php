@@ -12,9 +12,9 @@ class BlogController extends Controller
 {
     public function index()
     {
-        $blogs = Blog::get();
+        $blogs = Blog::with('images')->get();
         $categories = Blog::select('kategori')->distinct()->get();
-        $slug = null; // all
+        $slug = null;
 
         return view('blog.index', compact('blogs', 'categories', 'slug'));
     }

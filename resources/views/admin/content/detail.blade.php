@@ -8,7 +8,15 @@
 
     {{-- Tombol Aksi --}}
     <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-blue-700">Preview Konten</h2>
+        <div class="flex items-center space-x-4">
+            <a href="{{ route('admin.content.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 transition-colors">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Kembali
+            </a>
+            <h2 class="text-2xl font-bold text-blue-700">Preview Konten</h2>
+        </div>
         <div class="flex space-x-2">
             {{-- Toggle Status --}}
             <form id="form-toggle" action="{{ route('admin.content.toggle', $content->id) }}" method="POST" onsubmit="return false;">
@@ -76,6 +84,9 @@
     <div class="relative w-full flex items-center justify-center overflow-hidden rounded mb-6">
         @if($content->gambar)
             <img src="{{ asset('storage/'.$content->gambar) }}" alt="{{ $content->nama }}" class="object-cover object-center w-auto h-48 max-h-60 rounded">
+        @endif
+        @if($content->video)
+            <video src="{{ asset('storage/'.$content->video) }}" controls class="w-auto h-48 max-h-60 rounded"></video>
         @endif
     </div>
     <div class="text-gray-700">{!! $content->deskripsi !!}</div>

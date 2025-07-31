@@ -35,13 +35,17 @@
                 <template x-if="kategori === 'all' || kategori === '{{ $blog->kategori }}'">
                     <a href="{{ url('blog/detail/'.$blog->id) }}" class="flex bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
                         <div class="w-48 h-40 flex-shrink-0 bg-gray-200 flex items-center justify-center">
-                            <img src="{{ asset($blog->gambar) }}" alt="{{ $blog->judul }}" class="object-cover w-full h-full">
-                        </div>
+                          @if ($blog->images->count() > 0)
+                            <img src="{{ asset('storage/' . $blog->images->first()->gambar) }}" alt="{{ $blog->judul }}" class="object-cover w-full h-full">
+                          @else
+                            <div class="w-full h-full flex items-center justify-center text-gray-400 text-sm">Tidak ada gambar</div>
+                          @endif
+                      </div>
                         <div class="p-6 flex flex-col justify-between">
                             <div>
                             <div class="text-sm text-gray-500 mb-1">Kategori: {{ $blog->kategori }}</div>
                             <div class="text-xl font-bold text-gray-900 mb-2">{{ $blog->judul }}</div>
-                            <div class="text-gray-600 line-clamp-3">{{ Str::limit($blog->deskripsi, 120) }}</div>
+                            <div class="text-gray-600 line-clamp-3">{{ Str::limit(strip_tags($blog->deskripsi), 120, '...') }}</div>
                             </div>
                             <div class="text-xs text-gray-400 mt-4">Tanggal: {{ $blog->created_at->format('d M Y') }}</div>
                         </div>

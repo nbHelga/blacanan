@@ -1,21 +1,24 @@
-{{-- filepath: resources/views/components/ImgVidUpload.blade.php --}}
+@props(['value' => '', 'tipe' => 'gambar'])
+
 <div class="mb-4" x-data="{
-    tipe: '{{ $tipe ?? 'gambar' }}',
-    previewUrl: '{{ $value ?? '' }}',
+    tipe: @js($tipe),
+    previewUrl: @js($value ? (str_starts_with($value, 'http') ? $value : '/storage/' . $value) : ''),
     previewFile: null,
     showModal: false,
-    modalType: 'image',
+    modalType: @js($value && str_contains($value, '.mp4') ? 'video' : 'image'),
+    hasOld: @js($value ? true : false),
     handleFileSelect(event) {
         const file = event.target.files[0];
         if (file) {
             this.previewFile = file;
             this.previewUrl = URL.createObjectURL(file);
             this.modalType = file.type.startsWith('video') ? 'video' : 'image';
+            this.hasOld = false;
         }
     },
     openModal() { this.showModal = true; },
     closeModal(e) { if (e.target.classList.contains('modal-bg')) this.showModal = false; },
-    removePreview() { this.previewUrl = ''; this.previewFile = null; }
+    removePreview() { this.previewUrl = ''; this.previewFile = null; this.hasOld = false; }
 }">
     <label class="block font-semibold mb-2">Gambar/Video</label>
     <div class="mb-4">

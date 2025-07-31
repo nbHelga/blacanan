@@ -12,7 +12,7 @@ class SODController extends Controller
     // Public index
     public function index()
     {
-        $sods = SOD::get();
+        $sods = SOD::where('status', true)->get();
         return view('sod.index', compact('sods'));
     }
 
@@ -28,6 +28,13 @@ class SODController extends Controller
     {
         $sod = SOD::findOrFail($id);
         return view('admin.sod.detail', compact('sod'));
+    }
+
+    // Method untuk public detail view
+    public function showDetail($id)
+    {
+        $sod = SOD::where('status', true)->findOrFail($id);
+        return view('sod.detail', compact('sod'));
     }
 
     public function create()

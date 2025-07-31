@@ -1,6 +1,7 @@
 {{-- resources/views/admin/footer/edit.blade.php --}}
 @extends('admin.layouts.layout')
 @section('content')
+<div class="ml-8 mr-4"> {{-- Geser form ke kanan agar tidak tertutup sidebar --}}
 <form action="{{ route('admin.footer.update') }}" method="POST" class="space-y-6">
     @csrf
     <div>
@@ -12,22 +13,36 @@
         <input type="text" name="alamat" class="form-input w-full" value="{{ old('alamat', $footer->alamat) }}">
     </div>
     <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Link Google Maps</label>
-        <input type="url" name="maps_link" class="form-input w-full mb-2"
-               value="{{ old('maps_link', $footer->maps_link ?? '') }}"
-               placeholder="https://maps.google.com/...">
-        <small class="text-gray-500">Masukkan link Google Maps. Sistem akan otomatis mengubahnya menjadi embed code.</small>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Embed Code Google Maps</label>
+        <textarea name="maps" class="form-input w-full mb-2" rows="4"
+                  placeholder="Masukkan iframe embed code dari Google Maps">{{ old('maps', $footer->maps ?? '') }}</textarea>
+        <small class="text-gray-500">Masukkan iframe embed code dari Google Maps. Contoh: &lt;iframe src="https://www.google.com/maps/embed?pb=..." width="600" height="450"...&gt;&lt;/iframe&gt;</small>
 
         @if($footer->maps)
             <div class="mt-4">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Preview Maps</label>
-                <div class="w-full h-32 border rounded">
-                    {!! $footer->maps !!}
+                <div class="w-full h-32 border rounded overflow-hidden">
+                    <div class="w-full h-full">
+                        {!! str_replace(['width="600"', 'height="450"'], ['width="100%"', 'height="128"'], $footer->maps) !!}
+                    </div>
                 </div>
             </div>
         @endif
     </div>
-    <button type="submit" class="btn btn-primary">Simpan</button>
+    <div class="flex gap-4">
+        <button type="submit" class="inline-flex items-center px-6 py-3 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors shadow-md">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Simpan Footer
+        </button>
+        <a href="{{ route('admin.footer.index') }}" class="inline-flex items-center px-6 py-3 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 transition-colors shadow-md">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+            Batal
+        </a>
+    </div>
 </form>
 <div class="mt-8" x-data="{
     showAddForm: false,
@@ -100,8 +115,18 @@
                             <input x-model="editForm.value" type="text" name="value" class="form-input w-full" placeholder="Isi kontak" required>
                             <input type="file" name="gambar" accept="image/*" class="form-input w-full">
                             <div class="flex space-x-2">
-                                <button type="submit" class="btn btn-success">Update</button>
-                                <button type="button" @click="cancelEdit()" class="btn btn-secondary">Batal</button>
+                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors shadow-md">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Update
+                                </button>
+                                <button type="button" @click="cancelEdit()" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 transition-colors shadow-md">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    Batal
+                                </button>
                             </div>
                         </form>
                     </template>
@@ -145,4 +170,5 @@
         </template>
     </div>
 </div>
+</div> {{-- Tutup div ml-8 mr-4 --}}
 @endsection

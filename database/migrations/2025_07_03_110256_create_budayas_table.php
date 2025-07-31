@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('budayas', function (Blueprint $table) {
             $table->id();
-            $table->string('judul');
-            $table->string('subjudul');
+            $table->string('nama');
+            $table->string('kategori');
             $table->text('deskripsi');
             $table->string('gambar');
             $table->boolean('status')->default(true);

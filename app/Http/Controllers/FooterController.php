@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Footer;
 use App\Models\FooterKontak;
+use Illuminate\Support\Facades\Storage;
 
 class FooterController extends Controller
 {
@@ -25,7 +26,7 @@ class FooterController extends Controller
         $request->validate([
             'deskripsi' => 'nullable|string',
             'alamat' => 'nullable|string',
-            'maps_link' => 'nullable|url',
+            'maps' => 'nullable|string',
         ]);
 
         $footer = Footer::first();
@@ -33,39 +34,7 @@ class FooterController extends Controller
             $footer = new Footer();
         }
 
-        $data = $request->only(['deskripsi', 'alamat']);
-
-        // Convert Google Maps link to embed code
-        if ($request->maps_link) {
-            $mapsLink = $request->maps_link;
-
-            // Extract coordinates or place ID from various Google Maps URL formats
-            if (preg_match('/maps\.google\.com.*@(-?\d+\.\d+),(-?\d+\.\d+)/', $mapsLink, $matches)) {
-                // Format: https://maps.google.com/maps?q=lat,lng
-                $lat = $matches[1];
-                $lng = $matches[2];
-                $embedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000!2d{$lng}!3d{$lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sen!2sid!4v1234567890123!5m2!1sen!2sid";
-            } elseif (preg_match('/maps\.google\.com.*\/embed\?pb=([^&"]+)/', $mapsLink, $matches)) {
-                // Already an embed URL
-                $embedUrl = $mapsLink;
-            } elseif (preg_match('/maps\.google\.com.*\/place\/([^\/]+)/', $mapsLink, $matches)) {
-                // Place URL format
-                $place = urlencode($matches[1]);
-                $embedUrl = "https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q={$place}";
-            } else {
-                // Fallback: try to extract any coordinates
-                if (preg_match('/(-?\d+\.\d+),(-?\d+\.\d+)/', $mapsLink, $matches)) {
-                    $lat = $matches[1];
-                    $lng = $matches[2];
-                    $embedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000!2d{$lng}!3d{$lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sen!2sid!4v1234567890123!5m2!1sen!2sid";
-                } else {
-                    $embedUrl = $mapsLink; // Use as is if can't parse
-                }
-            }
-
-            $data['maps'] = '<iframe src="' . $embedUrl . '" class="w-full h-32 mb-2 rounded-lg border-0" allowfullscreen="" loading="lazy"></iframe>';
-            $data['maps_link'] = $mapsLink;
-        }
+        $data = $request->only(['deskripsi', 'alamat', 'maps']);
 
         $footer->fill($data);
         $footer->save();

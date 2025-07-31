@@ -17,9 +17,9 @@ return new class extends Migration
             $table->text('visi')->nullable();
             $table->text('misi')->nullable();
             $table->string('peta')->nullable();
-            $table->json('batas')->nullable();     // simpan array batas wilayah
-            $table->string('luas')->nullable();
-            $table->string('koordinat')->nullable();
+            // $table->json('batas')->nullable();     // simpan array batas wilayah
+            // $table->string('luas')->nullable();
+            // $table->string('koordinat')->nullable();
             $table->timestamps();
         });
     }

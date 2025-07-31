@@ -11,7 +11,7 @@ class UMKMController extends Controller
 {
     public function index()
     {
-        $umkms = UMKM::get();
+        $umkms = UMKM::where('status', true)->get();
         return view('umkm.index', compact('umkms'));
     }
 
@@ -49,41 +49,41 @@ class UMKMController extends Controller
             'gambar' => 'nullable|image|max:2048',
         ]);
 
-        Log::info('UMKMController Store - Request data:', $request->all());
-        Log::info('UMKMController Store - Has gambar file: ' . ($request->hasFile('gambar') ? 'true' : 'false'));
+        // Log::info('UMKMController Store - Request data:', $request->all());
+        // Log::info('UMKMController Store - Has gambar file: ' . ($request->hasFile('gambar') ? 'true' : 'false'));
 
         $umkm = new UMKM($request->except('gambar'));
         $umkm->gambar = null; // Set default value
 
         if ($request->hasFile('gambar')) {
-            Log::info('UMKMController Store - Processing gambar upload');
+            // Log::info('UMKMController Store - Processing gambar upload');
             $file = $request->file('gambar');
             $originalName = $file->getClientOriginalName();
             $dateFolder = date('Ymd');
             $folder = "umkms/{$dateFolder}";
 
-            Log::info('UMKMController Store - File info:', [
-                'original_name' => $originalName,
-                'size' => $file->getSize(),
-                'mime_type' => $file->getMimeType(),
-                'folder' => $folder
-            ]);
+            // Log::info('UMKMController Store - File info:', [
+            //     'original_name' => $originalName,
+            //     'size' => $file->getSize(),
+            //     'mime_type' => $file->getMimeType(),
+            //     'folder' => $folder
+            // ]);
 
             // Create folder if it doesn't exist
             if (!Storage::disk('public')->exists('umkms')) {
-                Log::info('UMKMController Store - Creating umkms folder');
+                // Log::info('UMKMController Store - Creating umkms folder');
                 Storage::disk('public')->makeDirectory('umkms');
             }
             if (!Storage::disk('public')->exists($folder)) {
-                Log::info('UMKMController Store - Creating date folder: ' . $folder);
+                // Log::info('UMKMController Store - Creating date folder: ' . $folder);
                 Storage::disk('public')->makeDirectory($folder);
             }
 
             try {
                 $stored = $file->storeAs($folder, $originalName, 'public');
-                Log::info('UMKMController Store - File stored successfully: ' . $stored);
+                // Log::info('UMKMController Store - File stored successfully: ' . $stored);
                 $umkm->gambar = "{$folder}/{$originalName}";
-                Log::info('UMKMController Store - UMKM gambar set to: ' . $umkm->gambar);
+                // Log::info('UMKMController Store - UMKM gambar set to: ' . $umkm->gambar);
             } catch (\Exception $e) {
                 Log::error('UMKMController Store - Error storing file: ' . $e->getMessage());
             }

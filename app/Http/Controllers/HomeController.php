@@ -8,6 +8,10 @@ use App\Models\UMKM;
 use App\Models\Budaya;
 use App\Models\SOD;
 use App\Models\Blog;
+use App\Models\Footer;
+use App\Models\ProfilDesa;
+use App\Models\Statistik;
+use App\Models\Mutasi;
 
 class HomeController extends Controller
 {
@@ -18,38 +22,36 @@ class HomeController extends Controller
         $budayas = Budaya::where('status', true)->limit(4)->get();
         $sods = SOD::where('status', true)->limit(3)->get();
         $blogs = Blog::with('images')->where('status', true)->limit(6)->get();
-        $categories = Blog::select('kategori')->distinct()->get();
-        $footer = \App\Models\Footer::with('kontak')->first();
+        $categories = Blog::where('status', true)->select('kategori')->distinct()->get();
+        $footer = Footer::with('kontak')->first();
 
         return view('home', compact('contents', 'umkms', 'budayas', 'sods', 'blogs', 'categories', 'footer'));
     }
     
     public function showProfil(){
-        $profil = \App\Models\ProfilDesa::first();
-        $statistik = \App\Models\Statistik::orderBy('urutan')->get();
-        $mutasi = \App\Models\Mutasi::orderBy('urutan')->get();
+        $profil = ProfilDesa::first();
+        $statistik = Statistik::orderBy('urutan')->get();
+        $mutasi = Mutasi::orderBy('urutan')->get();
         return view('profildesa', compact('profil', 'statistik', 'mutasi'));
     }
 
     public function byCategory($slug)
     {
         $blogs = Blog::where('kategori', $slug)->where('status', true)->get();
-        $categories = Blog::select('kategori')->distinct()->get();
+        $categories = Blog::where('status', true)->select('kategori')->distinct()->get();
 
         return view('blog.index', compact('blogs', 'categories', 'slug'));
     }
     public function blogIndex()
     {
         $blogs = Blog::where('status', true)->get();
-        $categories = Blog::select('kategori')->distinct()->get();
+        $categories = Blog::where('status', true)->select('kategori')->distinct()->get();
         $slug = null; // all
 
         return view('blog.index', compact('blogs', 'categories', 'slug'));
     }
 
-    public function showKependudukan(){
-        return view('kependudukan');
-    }
+// Method showKependudukan dipindah ke KependudukanController
 
     public function showSarana(){
         return view('sarana');

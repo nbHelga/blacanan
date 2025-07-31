@@ -1,10 +1,13 @@
-{{-- filepath: resources/views/components/MultipleImageUpload.blade.php --}}
+@props(['value' => ''])
+
 <div class="mb-4" x-data="{
     previewUrls: [],
     previewFiles: [],
     showModal: false,
     currentPreview: 0,
-    oldImages: {{ json_encode($value ?? []) }},
+    oldImages: @js($value ? array_map(function($img) {
+        return str_starts_with(trim($img), 'http') ? trim($img) : trim($img);
+    }, explode(',', $value)) : []),
     handleFileSelect(event) {
         const files = Array.from(event.target.files);
         this.previewFiles = files;
@@ -37,7 +40,7 @@
         <div class="flex flex-wrap gap-4 mt-4">
             <template x-for="(img, idx) in oldImages">
                 <div class="relative w-32 h-24 border rounded-lg p-2 bg-gray-50 flex flex-col items-center justify-center">
-                    <img :src="img" class="object-cover w-full h-16 rounded cursor-pointer" @click="openModal(idx)">
+                    <img :src="img.startsWith('http') ? img : '/storage/' + img" class="object-cover w-full h-16 rounded cursor-pointer" @click="openModal(idx)">
                     <div class="text-xs mt-1 truncate" x-text="img.split('/').pop()"></div>
                     <button type="button" @click="removeOld(idx)" class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">×</button>
                 </div>
@@ -58,7 +61,7 @@
     </template>
     <template x-if="showModal">
         <div class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 modal-bg" @click="closeModal">
-            <img :src="previewUrls[currentPreview] || oldImages[currentPreview]" class="max-w-3xl max-h-[80vh] rounded shadow-lg border-4 border-white">
+            <img :src="previewUrls[currentPreview] || (oldImages[currentPreview] && oldImages[currentPreview].startsWith('http') ? oldImages[currentPreview] : '/storage/' + oldImages[currentPreview])" class="max-w-3xl max-h-[80vh] rounded shadow-lg border-4 border-white">
             <button type="button" @click="showModal = false" class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-2xl">×</button>
         </div>
     </template>

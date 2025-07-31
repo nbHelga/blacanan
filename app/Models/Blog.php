@@ -11,7 +11,7 @@ class Blog extends Model
 
     public function images()
     {
-        return $this->hasMany(BlogImage::class)->orderBy('urutan');
+        return $this->hasMany(BlogImage::class, 'blog_id')->orderBy('urutan');
     }
 
     // Get first image for display in lists

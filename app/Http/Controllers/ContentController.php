@@ -43,7 +43,8 @@ class ContentController extends Controller
     public function create()
     {
         $content = null; // definisikan variabel kosong
-        return view('admin.content.form', compact('content'));
+        $images = [];
+        return view('admin.content.form', compact('content', 'images'));
         // return view('admin.content.form');
     }
 
@@ -60,7 +61,7 @@ class ContentController extends Controller
     $content = new Content($request->except(['gambar', 'video']));
 
     $dateFolder = date('Ymd');
-    $folder = "contents/{$dateFolder}";
+    $folder = "content/{$dateFolder}";
 
     if ($request->tipe === 'gambar' && $request->hasFile('gambar')) {
         $file = $request->file('gambar');

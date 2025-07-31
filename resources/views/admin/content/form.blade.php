@@ -21,14 +21,15 @@
         'value' => isset($content) && $content->gambar ? 'storage/' . $content->gambar : null
         ])
         @endcomponent --}}
-        <div class="mb-4">
+        {{-- <div class="mb-4">
             <label class="block font-semibold mb-2">Tipe Konten</label>
             <select name="tipe" x-model="tipe" class="border rounded px-3 py-2">
                 <option value="gambar">Gambar</option>
                 <option value="video">Video</option>
             </select>
-        </div>
-        <x-ImgVidUpload :value="isset($content) && $content->gambar ? 'storage/' . $content->gambar : null" :tipe="old('tipe', $content->tipe ?? 'gambar')" />
+        </div> --}}
+        <x-ImgVidUpload value="{{ isset($content) && $content->gambar ? 'storage/' . $content->gambar : '' }}" tipe="{{ old('tipe', $content->tipe ?? 'gambar') }}" />
+        {{-- <x-ImgVidUpload :value="isset($content) && $content->gambar ? 'storage/' . $content->gambar : null" :tipe="old('tipe', $content->tipe ?? 'gambar')" /> --}}
         {{-- <template x-if="tipe === 'gambar'">
             <div>
                 <x-GambarUpload :value="isset($content) && $content->gambar ? 'storage/'.$content->gambar : null" />
@@ -44,7 +45,7 @@
             </div>
         </template> --}}
         <div class="flex justify-end">
-            <button type="button" class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 mr-2" @click="showAdd = false">Batal</button>
+            <a href="{{ isset($content) ? route('admin.content.detail', $content->id) : route('admin.content.index') }}" class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 mr-2 inline-block text-center">Batal</a>
             <button type="button" class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700" @click="showAdd = true">Simpan</button>
         </div>
         <x-confirm-dialog

@@ -18,8 +18,6 @@ class ProfilDesaController extends Controller
                 'deskripsi' => '',
                 'visi' => '',
                 'misi' => '',
-                'luas' => '',
-                'koordinat' => '',
                 'peta' => null
             ]);
         }
@@ -36,8 +34,6 @@ class ProfilDesaController extends Controller
                 'deskripsi' => '',
                 'visi' => '',
                 'misi' => '',
-                'luas' => '',
-                'koordinat' => '',
                 'peta' => null
             ]);
         }
@@ -52,10 +48,7 @@ class ProfilDesaController extends Controller
             'deskripsi' => 'nullable|string',
             'visi' => 'nullable|string',
             'misi' => 'nullable|string',
-            'luas' => 'nullable|string',
-            'koordinat' => 'nullable|string',
             'peta' => 'nullable|image|max:2048',
-            'batas' => 'nullable|string',
         ]);
 
         $profil = ProfilDesa::first();
@@ -63,8 +56,7 @@ class ProfilDesaController extends Controller
             $profil = new ProfilDesa();
         }
 
-        $data = $request->except(['batas', 'peta', 'statistik', 'mutasi']);
-        $data['batas'] = $request->batas ? json_decode($request->batas, true) : null;
+        $data = $request->except(['peta', 'statistik', 'mutasi']);
 
         if ($request->hasFile('peta')) {
             // Delete old image if exists

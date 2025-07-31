@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->text('deskripsi')->nullable();
             $table->string('alamat')->nullable();
-            $table->text('maps')->nullable();
-            $table->text('maps_link')->nullable();
+            $table->text('maps')->nullable(); // untuk menyimpan iframe embed maps
             $table->timestamps();
         });
 

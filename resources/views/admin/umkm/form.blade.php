@@ -24,7 +24,7 @@
         @endcomponent
         <x-GambarUpload :value="isset($umkm) && $umkm->gambar ? 'storage/' . $umkm->gambar : null" />
         <div class="flex justify-end">
-            <button type="button" class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 mr-2" @click="showAdd = false">Batal</button>
+            <a href="{{ isset($umkm) ? route('admin.umkm.detail', $umkm->id) : route('admin.umkm.index') }}" class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 mr-2 inline-block text-center">Batal</a>
             <button type="button" class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700" @click="showAdd = true">Simpan</button>
         </div>
         <x-confirm-dialog

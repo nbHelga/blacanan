@@ -22,7 +22,7 @@
         />
         <x-GambarUpload :value="isset($sod) && $sod->gambar ? 'storage/' . $sod->gambar : null" />
         <div class="flex justify-end">
-            <button type="button" class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 mr-2" @click="showAdd = false">Batal</button>
+            <a href="{{ isset($sod) ? route('admin.sod.detail', $sod->id) : route('admin.sod.index') }}" class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-700 mr-2 inline-block text-center">Batal</a>
             <button type="button" class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700" @click="showAdd = true">Simpan</button>
         </div>
         <x-confirm-dialog

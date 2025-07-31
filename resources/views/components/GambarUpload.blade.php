@@ -1,8 +1,9 @@
-{{-- filepath: resources/views/components/GambarUpload.blade.php --}}
+@props(['value' => ''])
+
 <div class="mb-4" x-data="{
-    previewUrl: '{{ $value ?? '' }}',
+    previewUrl: @js($value ? (str_starts_with($value, 'http') ? $value : '/storage/' . $value) : ''),
     showModal: false,
-    hasOld: '{{ $value ? 'true' : 'false' }}',
+    hasOld: @js($value ? true : false),
     openModal() { this.showModal = true; },
     closeModal(e) { if (e.target.classList.contains('modal-bg')) this.showModal = false; },
     removePreview() { this.previewUrl = ''; this.hasOld = false; }

@@ -3,7 +3,6 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UMKMController;
-use App\Http\Controllers\BudayaController;
 use App\Http\Controllers\SODController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContentController;
@@ -13,6 +12,10 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InfografisController;   
 use App\Http\Controllers\FooterController;
 use App\Http\Controllers\ProfilDesaController;
+use App\Http\Controllers\KependudukanController;
+// use App\Http\Controllers\SaranaDesaController;
+// use App\Http\Controllers\WilayahDesaController;
+use App\Http\Controllers\BudayaController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -30,18 +33,17 @@ Route::get('/blog/detail/{id}', [BlogController::class, 'show'])->name('blog.det
 Route::get('/content', [ContentController::class, 'index']);
 Route::get('/content/detail/{id}', [ContentController::class, 'show'])->name('content.detail');
 Route::get('/sod', [SODController::class, 'index']);
-Route::get('/sod/detail/{id}', [SODController::class, 'show'])->name('sod.detail');
-Route::get('/budaya', [BudayaController::class, 'index']);
-// Route::get('/budaya', [BudayaController::class, 'showHome'])->name('budaya.home');
-Route::get('/budaya/detail/{id}', [BudayaController::class, 'show'])->name('budaya.detail');
+Route::get('/sod/detail/{id}', [SODController::class, 'showDetail'])->name('sod.detail');
+Route::get('/budaya', [BudayaController::class, 'index'])->name('budaya.index');
+Route::get('/budaya/detail/{id}', [BudayaController::class, 'showDetail'])->name('budaya.detail');
 Route::get('/blog/kategori/{slug}', [HomeController::class, 'byCategory'])->name('blog.byCategory');
 Route::get('/blog', [HomeController::class, 'blogIndex'])->name('blog.index');
-// Route::get('/kependudukan', [HomeController::class, 'showKependudukan'])->name('kependudukan');
+Route::get('/kependudukan', [KependudukanController::class, 'index'])->name('kependudukan');
 // Route::get('/sarana', [HomeController::class, 'showSarana'])->name('sarana');
 // Route::get('/wilayah', [HomeController::class, 'showWilayah'])->name('wilayah');
 Route::get('/infografis', [HomeController::class, 'showInfografis'])->name('infografis');
 Route::get('/ppid', [HomeController::class, 'showPPID'])->name('ppid');
-Route::get('/infografis', [InfografisController::class, 'index'])->name('infografis');
+// Route::get('/infografis', [InfografisController::class, 'index'])->name('infografis');
 
 
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -58,6 +60,16 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('footer/kontak/{id}/edit', [FooterController::class, 'editKontak'])->name('admin.footer.kontak.edit');
     Route::put('footer/kontak/{id}', [FooterController::class, 'updateKontak'])->name('admin.footer.kontak.update');
     Route::delete('footer/kontak/{id}', [FooterController::class, 'deleteKontak'])->name('admin.footer.kontak.delete');
+
+    // Kependudukan Admin Routes
+    Route::get('kependudukan', [KependudukanController::class, 'adminIndex'])->name('admin.kependudukan.index');
+    Route::put('kependudukan/update-all', [KependudukanController::class, 'updateAll'])->name('admin.kependudukan.updateAll');
+    Route::get('kependudukan/create', [KependudukanController::class, 'create'])->name('admin.kependudukan.create');
+    Route::post('kependudukan/store', [KependudukanController::class, 'store'])->name('admin.kependudukan.store');
+    Route::get('kependudukan/{id}/edit', [KependudukanController::class, 'edit'])->name('admin.kependudukan.edit');
+    Route::put('kependudukan/{id}', [KependudukanController::class, 'update'])->name('admin.kependudukan.update');
+    Route::delete('kependudukan/{id}', [KependudukanController::class, 'destroy'])->name('admin.kependudukan.destroy');
+
     // Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     // Blog
@@ -71,16 +83,25 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     // Content
     Route::get('/content', [ContentController::class, 'index'])->name('admin.content.index');
     Route::get('/content/create', [ContentController::class, 'create'])->name('admin.content.create');
-    Route::get('/test-log', function() {
-        file_put_contents(storage_path('logs/debug.log'), "Test route hit\n", FILE_APPEND);
-        \Log::info('Test route hit');
-        return 'Test logged';
+    // Route::get('/test-log', function() {
+        // file_put_contents(storage_path('logs/debug.log'), "Test route hit\n", FILE_APPEND);
+        // \Log::info('Test route hit');
+        // return 'Test logged';
+    // });
+
+    Route::get('/test-footer', function() {
+        $footer = \App\Models\Footer::with('kontak')->first();
+        return response()->json([
+            'footer' => $footer,
+            'kontak_count' => $footer ? $footer->kontak->count() : 0,
+            'kontak_data' => $footer ? $footer->kontak : []
+        ]);
     });
 
     Route::post('/content/store', function(\Illuminate\Http\Request $request) {
-        file_put_contents(storage_path('logs/debug.log'), "Route hit: admin.content.store\n", FILE_APPEND);
-        \Log::info('Route hit: admin.content.store');
-        \Log::info('Request data in route:', $request->all());
+        // file_put_contents(storage_path('logs/debug.log'), "Route hit: admin.content.store\n", FILE_APPEND);
+        // \Log::info('Route hit: admin.content.store');
+        // \Log::info('Request data in route:', $request->all());
         return app(\App\Http\Controllers\ContentController::class)->store($request);
     })->name('admin.content.store');
     Route::get('/admin/content/edit/{id}', [ContentController::class, 'edit'])->name('admin.content.edit');
@@ -131,3 +152,15 @@ Route::prefix('admin/blog')->middleware(['auth'])->group(function () {
     Route::get('/detail/{id}', [BlogController::class, 'adminShow'])->name('admin.blog.detail');
     Route::put('/toggle/{id}', [BlogController::class, 'toggle'])->name('admin.blog.toggle');
 });
+
+Route::prefix('admin/budaya')->middleware(['auth'])->group(function () {
+    Route::get('/', [BudayaController::class, 'indexAdmin'])->name('admin.budaya.index');
+    Route::get('/create', [BudayaController::class, 'create'])->name('admin.budaya.create');
+    Route::post('/store', [BudayaController::class, 'store'])->name('admin.budaya.store');
+    Route::get('/{id}/edit', [BudayaController::class, 'edit'])->name('admin.budaya.edit');
+    Route::put('/{id}', [BudayaController::class, 'update'])->name('admin.budaya.update');
+    Route::get('/{id}', [BudayaController::class, 'show'])->name('admin.budaya.show');
+    Route::delete('/{id}', [BudayaController::class, 'destroy'])->name('admin.budaya.destroy');
+    Route::put('/{id}/toggle', [BudayaController::class, 'toggle'])->name('admin.budaya.toggle');
+});
+// Admin Kependudukan routes sudah ada di atas dalam middleware auth group

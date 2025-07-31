@@ -21,22 +21,21 @@ class FooterKontak extends Model
             // Extract username/handle from social media URLs
             if (strpos($this->value, 'twitter.com') !== false || strpos($this->value, 'x.com') !== false) {
                 preg_match('/(?:twitter\.com|x\.com)\/([^\/\?]+)/', $this->value, $matches);
-                return isset($matches[1]) ? '@' . $matches[1] : ($this->label ?: $this->value);
+                return isset($matches[1]) ? '@' . $matches[1] : $this->value;
             }
             if (strpos($this->value, 'facebook.com') !== false) {
                 preg_match('/facebook\.com\/([^\/\?]+)/', $this->value, $matches);
-                return isset($matches[1]) ? $matches[1] : ($this->label ?: $this->value);
+                return isset($matches[1]) ? $matches[1] : $this->value;
             }
             if (strpos($this->value, 'instagram.com') !== false) {
                 preg_match('/instagram\.com\/([^\/\?]+)/', $this->value, $matches);
-                return isset($matches[1]) ? '@' . $matches[1] : ($this->label ?: $this->value);
+                return isset($matches[1]) ? '@' . $matches[1] : $this->value;
             }
-            // For other URLs, try to extract domain or use label
-            $parsed = parse_url($this->value);
-            return $this->label ?: ($parsed['host'] ?? $this->value);
+            // For other URLs, return the value
+            return $this->value;
         }
 
-        // For non-URLs (like email, phone), return the value or label
-        return $this->label ?: $this->value;
+        // For non-URLs (like email, phone), return the value
+        return $this->value;
     }
 }

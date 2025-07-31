@@ -1,6 +1,7 @@
 {{-- resources/views/admin/profil_desa/edit.blade.php --}}
 @extends('admin.layouts.layout')
 @section('content')
+<div class="ml-8 mr-4"> {{-- Geser form ke kanan agar tidak tertutup sidebar --}}
 <form action="{{ route('admin.profil_desa.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
     @csrf
     <div>
@@ -72,7 +73,7 @@
             <img src="{{ asset('storage/'.$profil->peta) }}" class="w-40 mt-2">
         @endif
     </div>
-    <div>
+    {{-- <div>
         <label>Batas Wilayah (JSON)</label>
         <textarea name="batas" class="form-input w-full" rows="2">{{ old('batas', json_encode($profil->batas)) }}</textarea>
     </div>
@@ -83,7 +84,21 @@
     <div>
         <label>Koordinat</label>
         <input type="text" name="koordinat" class="form-input w-full" value="{{ old('koordinat', $profil->koordinat) }}">
+    </div> --}}
+    <div class="flex gap-4">
+        <button type="submit" class="inline-flex items-center px-6 py-3 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors shadow-md">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Simpan Perubahan
+        </button>
+        <a href="{{ route('admin.profil_desa.index') }}" class="inline-flex items-center px-6 py-3 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 transition-colors shadow-md">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+            Batal
+        </a>
     </div>
-    <button type="submit" class="btn btn-primary">Simpan</button>
 </form>
+</div> {{-- Tutup div ml-8 mr-4 --}}
 @endsection
